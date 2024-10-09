@@ -1,0 +1,3 @@
+#  Default configuration for zshpy
+
+python_executable: python3

@@ -1,5 +1,5 @@
 """Main Tester Script"""
-#  GPL-3.0 license
+#  AGPL-3.0 license
 #  Copyright (c) 2024 Asger Jon Vistisen
 from __future__ import annotations
 
@@ -9,9 +9,10 @@ import time
 from typing import Callable
 
 from icecream import ic
-from vistutils.text import stringList
+from pyperclip import copy
 
-from zshpy import FilePath
+from moreworktoy import findEnvNames, testLOL
+from yolo import yolo
 
 
 def tester00() -> int:
@@ -23,31 +24,94 @@ def tester00() -> int:
 
 
 def tester01() -> int:
-  """Main Tester Script"""
-  kill = FilePath(
-    '/home/AsgerJon/PycharmProjects/ezside/src/ezside/widgets/charts'
-    '/__pycache__/')
-  print(kill)
+  """Testing find env names without regex"""
+  torture_string = """
+  $VALID_VAR $123INVALID $Another_Valid_One$Together $noSpace 
+  $But$Next$OneValid 
+  $Multiple$Concatenated$Vars $Single$Valid $123AND$INVALID_TOO 
+  $_UnderscoreFirst $WITH_NUM123 $Symbols_Are$Here $Mixed_Case123 
+  Surrounded$VarInText$With$Random$Characters $EdgeCase $Almost_$Valid 
+  $WITH_SPACES $TRAILING_ $AtTheEnd $WITH123NUMBERS $A123B 
+  and some tricky ones $WITH_MIXED_Case123andNumbers $ALL_CAPS 
+  $small_lower $WITH_special$char_inside 
+  """
+  torture_names = findEnvNames(torture_string)
+  expected_names = [
+      "VALID_VAR",
+      "Another_Valid_One",
+      "Together",
+      "noSpace",
+      "But",
+      "Next",
+      "OneValid",
+      "Multiple",
+      "Concatenated",
+      "Vars",
+      "Single",
+      "Valid",
+      "INVALID_TOO",
+      "_UnderscoreFirst",
+      "WITH_NUM123",
+      "Symbols_Are",
+      "Here",
+      "Mixed_Case123",
+      "VarInText",
+      "With",
+      "Random",
+      "Characters",
+      "EdgeCase",
+      "Almost_",
+      "Valid",
+      "WITH_SPACES",
+      "TRAILING_",
+      "AtTheEnd",
+      "WITH123NUMBERS",
+      "A123B",
+      "WITH_MIXED_Case123andNumbers",
+      "ALL_CAPS",
+      "small_lower",
+      "WITH_special",
+      "char_inside"
+  ]
+
+  print('Found the following names:')
+  print('_' * 50)
+  for name in torture_names:
+    if name not in expected_names:
+      print('Unexpected name:', name)
+      break
+  else:
+    for name in expected_names:
+      if name not in torture_names:
+        print('Expected name not found:', name)
+        break
+    else:
+      print('All expected names found!')
+  print('¨' * 50)
   return 0
 
 
-def main(callMeMaybe: Callable) -> None:
-  """Main Tester Script"""
-  tic = time.time()
-  print('Running python script located at: \n%s' % sys.argv[0])
-  print('Started at: %s' % time.ctime())
-  print(77 * '-')
-  retCode = 0
-  try:
-    retCode = callMeMaybe()
-  except Exception as exception:
-    print('Exception: %s' % exception)
-    raise exception
-  retCode = 0 if retCode is None else retCode
-  print(77 * '-')
-  print('Return Code: %s' % retCode)
-  print('Runtime: %.3f seconds' % (time.time() - tic))
+def tester02() -> int:
+  """Testing getNotice"""
+  print(testLOL())
+  return 0
+
+
+def tester03() -> int:
+  """Letters and their 'ord' values"""
+  for letter in 'abcdefghijklmnopqrstuvwxyz':
+    print(f'{letter} = {ord(letter)}')
+  for letter in 'abcdefghijklmnopqrstuvwxyz'.upper():
+    print(f'{letter} = {ord(letter)}')
+  for letter in '0123456789':
+    print(f'{letter} = {ord(letter)}')
+  #  inverse of ord:
+  for number in range(65, 91):
+    print(f'{chr(number)} = {number}')
+  for i in range(256):
+    print('chr(%d): %s' % (i, chr(i)))
+  return 0
 
 
 if __name__ == '__main__':
-  main(tester01)
+  yolo(tester01)
