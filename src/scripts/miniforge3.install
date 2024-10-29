@@ -1,0 +1,18 @@
+post_install(){
+    echo -e '
+    By default, the installed conda and mamba are not enabled, meaning that
+    the system python remains the same. Enabling conda or mamba can be set
+    in .zshrc or .bashrc. A more sophisticated approach is to define a
+    function in .zshrc or .bashrc that will activate conda or mamba.
+
+    ${INSTALL_DIR}/etc/profile.d provides two scripts that enable conda and
+    mamba named conda.sh and mamba.sh respectively.
+
+    The simplest approach is the simply source the script during .zshrc or
+    .bashrc, but a more sophisticated approach is to create a pair of
+    functions that will activate conda or mamba. This allows the conda/mamba
+    environments to remain isolated from the system python.
+    '
+}
+
+

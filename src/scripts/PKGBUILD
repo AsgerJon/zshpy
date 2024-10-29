@@ -1,0 +1,37 @@
+# Maintainer: Asger Jon Vistisen asgerjon2@gmail.com
+## Brings miniforge to aur
+pkgname=miniforge
+pkgver=24.7.1.2
+_pkgver=24.7.1-2
+pkgrel=1
+pkgdesc="A conda-forge distribution."
+arch=(x86_64 aarch64 powerpc64le)
+url="https://github.com/conda-forge/miniforge/releases/download"
+license=(BSD-3-Clause)
+provides=(conda mamba)
+source_x86_64=(${url}/${_pkgver}/Miniforge3-${_pkgver}-Linux-x86_64.sh)
+source_aarch64=(${url}/${_pkgver}/Miniforge3-${_pkgver}-Linux-aarch64.sh)
+source_powerpc64le=(${url}/${_pkgver}/Miniforge3-${_pkgver}-Linux-ppc64le.sh)
+sha256sums_x86_64=('636f7faca2d51ee42b4640ce160c751a46d57621ef4bf14378704c87c5db4fe3')
+sha256sums_aarch64=('7bf60bce50f57af7ea4500b45eeb401d9350011ab34c9c45f736647d8dba9021')
+sha256sums_powerpc64le=('bb5d14dac73b85da8fbe386cdd3c94022a468563a0c55e6b20a58d82b55a9737')
+
+package() {
+    local _installer="Miniforge3-${_pkgver}-Linux-${CARCH}.sh"
+    local _install_dir="${pkgdir}/opt/miniforge"
+
+    # Ensure the installation directory is clean
+    rm -rf "${_install_dir}"
+    mkdir -p "${_install_dir}"
+
+    # Example of setting LD_PRELOAD for the installer command
+    # This assumes there is a specific library you want to preload, such as 'libexample.so'
+    LD_PRELOAD="/usr/lib/libexample.so"
+    export LD_PRELOAD
+
+    # Execute the installer script with LD_PRELOAD set
+    sh "${srcdir}/${_installer}" -b -p "${_install_dir}"
+
+    # Unset LD_PRELOAD if not needed afterwards to avoid affecting other commands
+    unset LD_PRELOAD
+}
